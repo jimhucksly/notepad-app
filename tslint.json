@@ -1,0 +1,23 @@
+{
+  "extends": "tslint:latest",
+  "rules": {
+    "curly": [true, "ignore-same-line"],
+    "quotemark": [true, "single", "avoid-escape", "avoid-template"],
+    "semicolon": [true, "never"],
+    "ordered-imports": false,
+    "no-implicit-dependencies": false,
+    "no-submodule-imports": false,
+    "no-reference": false,
+    "object-literal-sort-keys": false,
+    "trailing-comma": false,
+    "member-ordering": false,
+    "member-access": false,
+    "whitespace": [true, "check-operator", "check-typecast"],
+    "no-unused-expression": false
+  },
+  "jsRules": {
+    "curly": true
+  },
+  "rulesDirectory": [
+  ]
+}

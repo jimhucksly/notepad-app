@@ -1,0 +1,21 @@
+@charset "utf-8";
+
+/*--------------- FONTS -------------*/
+
+@mixin mix-font-face ($font_name, $font_file) {
+    
+    font-family: $font_name;
+    src: url('../fonts/#{$font_file}.eot');
+    src: url('../fonts/#{$font_file}.eot?#iefix') format('embeded-opentype');
+    src: local('O'), url('../fonts/#{$font_file}.woff') format('woff'), 
+    url('../fonts/#{$font_file}.svg') format('svg'), 
+    url('../fonts/#{$font_file}.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    @include mix-font-face('Roboto-Regular', Roboto-Regular);
+}
+@font-face {
+    @include mix-font-face('Roboto-Thin', Roboto-Thin);
+}

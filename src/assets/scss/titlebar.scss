@@ -1,0 +1,222 @@
+
+@import './variables.scss';
+
+.title-bar {
+  -webkit-app-region: drag;
+  position: relative;
+  margin: 0;
+  display: flex;
+  flex-grow: 0;
+  flex-basis: 30px;
+  background-color: #000;
+  width: 100%;
+  height: 30px;
+  min-height: 30px;
+  color: #fff;
+  font-family: $regular;
+}
+
+.menu-button-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 45px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+  z-index: 10;
+
+  .menu-button {
+    -webkit-app-region: no-drag;
+    background-color: #000;
+    width: 45px;
+    height: 100%;
+    cursor: default;
+    padding: 0;
+    padding-top: 4px;
+
+    i {
+      display: block;
+      width: 15px;
+      height: 1px;
+      background-color: #fff;
+      margin-bottom: 3px;
+      margin-left: 13px;
+    }
+
+    &:hover {
+      background-color: lighten(#000, 20%);
+    }
+  }
+}
+
+.reload-button-container {
+  position: absolute;
+  top: 0;
+  left: 45px;
+  width: 45px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+  z-index: 10;
+
+  .reload-button {
+    -webkit-app-region: no-drag;
+    background-color: #000;
+    width: 45px;
+    height: 100%;
+    cursor: default;
+    padding: 0;
+
+    span {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+    }
+
+    svg {
+      display: block;
+      width: 50%;
+      height: 50%;
+      fill:#fff;
+      stroke-width: 1px;
+      stroke: #fff;
+    }
+
+    &:hover {
+      background-color: lighten(#000, 20%);
+    }
+  }
+}
+
+.app-name-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  font-size: 13px;
+  z-index: 1;
+
+  .titlebar-logo {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+
+    img {
+      object-fit: contain;
+    } 
+  }
+}
+
+.window-controls-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 200px;
+  height: 100%;
+  z-index: 10;
+}
+
+.minimize-button {
+  -webkit-app-region: no-drag;
+  position: relative;
+  background-color: #000;
+  width: 45px;
+  height: 100%;
+  cursor: default;
+
+  &:after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 15px;
+    left: 17px;
+    width: 11px;
+    height: 1px;
+    background-color: #ccc;
+  }
+
+  &:hover {
+    background-color: lighten(#000, 20%);
+  }
+}
+
+.min-max-button {
+  -webkit-app-region: no-drag;
+  position: relative;
+  background-color: #000;
+  width: 45px;
+  height: 100%;
+  cursor: default;
+
+  &:before,
+  &:after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 8px;
+    left: 18px;
+    width: 10px;
+    height: 10px;
+    border: 1px solid #ccc;
+  }
+
+  &:after {
+    background-color: #000;
+    top: 11px;
+    left: 15px;
+  }
+
+  &:hover {
+    background-color: lighten(#000, 20%);
+
+    &:after {
+      background-color: lighten(#000, 20%);
+    }
+  }
+}
+
+.close-button {
+  -webkit-app-region: no-drag;
+  position: relative;
+  background-color: #000;
+  width: 45px;
+  height: 100%;
+  cursor: default;
+
+  &:before,
+  &:after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 13px;
+    left: 14px;
+    width: 15px;
+    height: 1px;
+    background-color: #ccc;
+  }
+
+  &:before {
+    transform: rotate(45deg);
+  }
+  &:after {
+    transform: rotate(-45deg);
+  }
+
+  &:hover {
+    background-color: #e60702;
+
+    &:before,
+    &:after {
+      background-color: #fff;
+    }
+  }
+}

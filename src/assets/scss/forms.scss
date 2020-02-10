@@ -1,0 +1,142 @@
+
+@import './variables.scss';
+
+.form-group {
+  display: flex;
+  margin-bottom: 15px;
+
+  .form-group-inner {
+    position: relative;
+    flex-basis: 100%;
+    flex-grow: 1;
+
+    label {
+      display: block;
+      color: $blue;
+      font-size: 13px;
+      line-height: 30px;
+      transition: all 0.3s;
+
+      &.error {
+        color: $red;
+      }
+    }
+  }
+
+  .form-group-btn {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    flex-basis: 110px;
+    flex-grow: 0;
+    flex-shrink: 0;
+  }
+}
+
+.form-label-error {
+  color: $red;
+  font-size: 12px;
+}
+
+.form-auth {
+  width: 250px;
+
+  & > div {
+    position: relative;
+  }
+
+  .form-group {
+    display: block;
+  }
+
+  input {
+    position: relative;
+    letter-spacing: 1px;
+    z-index: 10;
+  }
+  button {
+    width: 100%;
+  }
+  label {
+    display: flex;
+    position: absolute;
+    top: 0;
+    right: 0;
+    align-items: center;
+    height: 100%;
+    z-index: 1;
+
+    &.active {
+      right: 105%;
+    }
+  }
+}
+
+input[type="text"],
+input[type="password"] {
+  border: 1px solid #ccc;
+  height: 30px;
+  font-size: 14px;
+  width: 100%;
+  padding: 0 6px;
+
+  &.error {
+    border: 1px solid $red;
+  }
+
+  &[readonly] {
+    color: #bbb;
+  }
+}
+
+input[type="file"] {
+  display: none;
+}
+
+textarea {
+  width: 100%;
+  height: 100%;
+  padding: 6px;
+  font-family: $regular;
+  font-size: 13px;
+  border: 1px solid #ccc;
+  resize: none;
+  overflow: auto;
+
+  &:focus {
+    outline: none;
+    border: 1px solid $blue_light;
+  }
+}
+
+.btn {
+  background: none;
+  border: none;
+  border-radius: 3px;
+  width: 100px;
+  height: 30px;
+  color: #fff;
+  font-size: 15px;
+}
+
+.btn-primary {
+  background-color: $blue_light;
+  &:hover {
+    background-color: $blue;
+  }
+}
+
+.btn-default {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  color: #333;
+  &:hover {
+    background-color: #ccc;
+  }
+}
+
+.btn-sm {
+  width: 85px;
+  height: 20px;
+  font-size: 12px;
+}

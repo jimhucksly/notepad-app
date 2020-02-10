@@ -1,0 +1,177 @@
+
+@import 'variables';
+
+@for $i from 1 through 10 {
+  @each $n, $name in ('m': 'margin', 'p':'padding') {
+    @each $t, $type in ('t': 'top', 'r': 'right', 'b': 'bottom', 'l': 'left') {
+      .#{$n}-#{$t}-#{$i*5} {
+        #{$name}-#{$type}: #{$i*5}px;
+      }
+      .#{$n}-#{$t}-#{$i*5}i {
+        #{$name}-#{$type}: #{$i*5}px !important;
+      }
+    }
+  }
+}
+
+.g-row {display: flex; flex-direction: row}
+.g-row-reverse{display: flex; flex-direction: row-reverse}
+.g-column {display: flex; flex-direction: column}
+.flex-start {display: flex; justify-content: flex-start}
+.flex-end {display: flex; justify-content: flex-end}
+.flex-center {display: flex; justify-content: center}
+.flex-around {display: flex; justify-content: space-around}
+.flex-between {display: flex; justify-content: space-between}
+.items-start {display: flex; align-items: flex-start}
+.items-center {display: flex; align-items: center}
+.items-end {display: flex; align-items: flex-end}
+.items-stretch {display: flex; align-items: stretch}
+.flex-wrap {display: flex; flex-wrap: wrap}
+
+.flex-start,
+.flex-end,
+.flex-center,
+.flex-around,
+.flex-between,
+.items-start,
+.items-center,
+.items-end,
+.items-stretch {
+  & > .row {
+    min-width: 100%
+  }
+}
+
+@keyframes loading {
+  0% {
+    margin-left: 0px;
+  }
+  100% {
+    margin-left: 100%;
+  }
+}
+
+a[href] {
+  color: $blue;
+}
+
+.editor_wrapper {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100;
+
+  .editor-toolbar {
+    flex-basis: 54px;
+    flex-shrink: 0;
+
+    .fa-save {
+      cursor: pointer;
+    }
+  }
+
+  .CodeMirror {
+    height: auto;
+    min-height: auto;
+    flex-basis: 100%;
+    flex-grow: 1;
+  }
+
+  .CodeMirror-scroll {
+    min-height: 100%;
+  }
+}
+
+.json_viewer {
+  .ace_scrollbar.ace_scrollbar-v {
+    display: none !important;
+  }
+  .ace_scrollbar.ace_scrollbar-h {
+    display: none !important;
+  }
+}
+
+// notepad cont scrollbar styling
+
+.notepad_cont::-webkit-scrollbar-button,
+.editor-preview::-webkit-scrollbar-button,
+.CodeMirror-scroll::-webkit-scrollbar-button {
+  background-image: url('') !important;
+  background-repeat: no-repeat !important;
+  width: 10px !important;
+  height: 0px !important;
+}
+
+.notepad_cont::-webkit-scrollbar-track,
+.editor-preview::-webkit-scrollbar-track,
+.CodeMirror-scroll::-webkit-scrollbar-track {
+  background-color:#eee !important;
+}
+
+.notepad_cont::-webkit-scrollbar-thumb,
+.editor-preview::-webkit-scrollbar-thumb,
+.CodeMirror-scroll::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 0px !important;
+  border-radius: 0px !important;
+  background-color: $blue_light !important;
+}
+
+.notepad_cont::-webkit-scrollbar-thumb:hover,
+.editor-preview::-webkit-scrollbar-thumb:hover,
+.CodeMirror-scroll::-webkit-scrollbar-thumb:hover {
+  background-color: $blue_light !important;
+}
+
+.notepad_cont::-webkit-resizer,
+.editor-preview::-webkit-resizer,
+.CodeMirror-scroll::-webkit-resizer {
+  background-image:url('') !important;
+  background-repeat:no-repeat !important;
+  width: 10px !important;
+  height: 0px !important;
+}
+
+.notepad_cont::-webkit-scrollbar,
+.editor-preview::-webkit-scrollbar,
+.CodeMirror-scroll::-webkit-scrollbar {
+  width: 10px !important;
+}
+
+// projects|markdown scrollbar styling
+
+.projects::-webkit-scrollbar-button,
+.markdown::-webkit-scrollbar-button {
+  background-image:url('');
+  background-repeat:no-repeat;
+  width:6px;
+  height:0px
+}
+
+.projects::-webkit-scrollbar-track,
+.markdown::-webkit-scrollbar-track {
+  background-color:#eee;
+}
+
+.projects::-webkit-scrollbar-thumb,
+.markdown::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 0px;
+  border-radius: 0px;
+  background-color: lighten(#303d3c, 35%);
+}
+
+.projects::-webkit-scrollbar-thumb:hover,
+.markdown::-webkit-scrollbar-thumb:hover {
+  background-color: lighten(#303d3c, 35%);
+  border: 2px solid #eee}
+
+.projects::-webkit-resizer,
+.markdown::-webkit-resizer {
+  background-image:url('');
+  background-repeat:no-repeat;
+  width:6px;
+  height:0px
+}
+
+.projects::-webkit-scrollbar,
+.markdown::-webkit-scrollbar {
+  width: 6px;
+}
