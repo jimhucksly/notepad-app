@@ -13,22 +13,22 @@ export default class Controls extends Vue {
   @Prop()
   collection!: string[]
 
-  editable_items: string[] = []
+  editableItems: string[] = []
 
   get json() {
-    return this.$store.getters['getJson']
+    return this.$store.getters.getJson
   }
   get filter() {
-    return this.$store.getters['getFilter']
+    return this.$store.getters.getFilter
   }
   get refs() {
     return this.$parent.$refs
   }
 
-  protected edit(e: any, stamp: string) {
+  protected edit(event: any, stamp: string) {
     const items: any = this.refs.notepad_item
     const item = items.find((el: any) => el.dataset.stamp === stamp)
-    this.editable_items.push(stamp)
+    this.editableItems.push(stamp)
     const content = item.querySelector('.notepad_item_content')
     const area = document.createElement('textarea')
     area.style.visibility = 'hidden'
@@ -37,9 +37,9 @@ export default class Controls extends Vue {
     const div = document.createElement('div')
     div.innerHTML = this.json[stamp].message
     const urls = div.querySelectorAll('a')
-    urls.length && urls.forEach(el => {
-      let href = el.href
-      let p = document.createElement('p')
+    urls.length && urls.forEach((el: any) => {
+      const href: string = el.href
+      const p = document.createElement('p')
       p.innerHTML = href
       div.insertBefore(p, el)
       el.remove()
@@ -47,8 +47,15 @@ export default class Controls extends Vue {
     area.value = div.innerHTML.replace(/<br\/?>/g, '\n').replace(/<\/?p\/?>/g, '')
     area.style.height = area.scrollHeight * 1.1 + 'px'
     area.style.visibility = 'visible'
-    area.addEventListener('keydown', (e) => {
-      if((e.code === 'Enter' || e.key === 'Enter' || e.code === 'KeyS' || e.key === 's' || e.key === 'ы') && e.ctrlKey) {
+    area.addEventListener('keydown', (e: any) => {
+      if(
+        (e.code === 'Enter' ||
+        e.key === 'Enter' ||
+        e.code === 'KeyS' ||
+        e.key === 's' ||
+        e.key === 'ы') &&
+        e.ctrlKey
+      ) {
         e.preventDefault()
         this.save(e, stamp)
       }
@@ -57,8 +64,8 @@ export default class Controls extends Vue {
   protected save(e: any, stamp: string) {
     const items: any = this.refs.notepad_item
     const item = items.find((el: any) => el.dataset.stamp === stamp)
-    const i = this.editable_items.findIndex(item => item === stamp)
-    this.editable_items.splice(i, 1)
+    const i = this.editableItems.findIndex((el: string) => el === stamp)
+    this.editableItems.splice(i, 1)
     const content = item.querySelector('.notepad_item_content')
     const textarea = content.querySelector('textarea')
     const value = textarea.value.replace(/\n/g, '<br>')
@@ -75,7 +82,7 @@ export default class Controls extends Vue {
         message: p.innerHTML
       }
     }
-    this.$store.dispatch('json', Object.assign({}, this.json, o))
+    this.$store.dispatch('json', { ...this.json, ...o })
     this.$nextTick(() => {
       this.$store.dispatch('action', {
         type: 'UPDATE',
@@ -84,8 +91,8 @@ export default class Controls extends Vue {
     })
   }
   protected removeHandler(stamp: string) {
-    let buffJson = cloneDeep(this.json)
-    let buffFilter = cloneDeep(this.filter)
+    const buffJson = cloneDeep(this.json)
+    const buffFilter = cloneDeep(this.filter)
     unset(buffJson, stamp)
     unset(buffFilter, stamp)
     this.$store.dispatch('json', buffJson)

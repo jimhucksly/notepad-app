@@ -1,5 +1,5 @@
-import * as fs from 'fs'
-import * as path from 'path'
+const fs = require('fs')
+const path = require('path')
 
 // interface IStorage {
 //   isPathExists(_path: string): Promise<void>;
@@ -12,7 +12,7 @@ import * as path from 'path'
 class Storage  {
   public isPathExists(_path: string): Promise<object> {
     return new Promise((resolve, reject) => {
-      fs.access(_path, (err) => {
+      fs.access(_path, (err: Error) => {
         if(err) {
           return reject(err)
         } else {
@@ -26,7 +26,7 @@ class Storage  {
     return new Promise((resolve, reject) => {
       let filePath = _path
       if(_file !== undefined) filePath = path.resolve(_path, _file)
-      fs.access(filePath, (err) => {
+      fs.access(filePath, (err: Error) => {
         if(err) {
           return reject(err)
         } else {
@@ -94,7 +94,7 @@ class Storage  {
           if(key && json[key] !== undefined) resolve(json[key])
           else resolve(json)
         })
-        .catch((err:any) => {
+        .catch((err: any) => {
           reject(err)
         })
     })

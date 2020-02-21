@@ -27,6 +27,7 @@
 .items-end {display: flex; align-items: flex-end}
 .items-stretch {display: flex; align-items: stretch}
 .flex-wrap {display: flex; flex-wrap: wrap}
+.shrink-0 {flex-shrink: 0}
 
 .flex-start,
 .flex-end,
@@ -94,7 +95,9 @@ a[href] {
 
 .notepad_cont::-webkit-scrollbar-button,
 .editor-preview::-webkit-scrollbar-button,
-.CodeMirror-scroll::-webkit-scrollbar-button {
+.CodeMirror-scroll::-webkit-scrollbar-button,
+.events__calendar::-webkit-scrollbar-button,
+textarea::-webkit-scrollbar-button {
   background-image: url('') !important;
   background-repeat: no-repeat !important;
   width: 10px !important;
@@ -103,36 +106,48 @@ a[href] {
 
 .notepad_cont::-webkit-scrollbar-track,
 .editor-preview::-webkit-scrollbar-track,
-.CodeMirror-scroll::-webkit-scrollbar-track {
+.CodeMirror-scroll::-webkit-scrollbar-track,
+.events__calendar::-webkit-scrollbar-track,
+textarea::-webkit-scrollbar-track {
   background-color:#eee !important;
 }
 
 .notepad_cont::-webkit-scrollbar-thumb,
 .editor-preview::-webkit-scrollbar-thumb,
-.CodeMirror-scroll::-webkit-scrollbar-thumb {
+.CodeMirror-scroll::-webkit-scrollbar-thumb,
+.events__calendar::-webkit-scrollbar-thumb,
+textarea::-webkit-scrollbar-thumb {
   -webkit-border-radius: 0px !important;
   border-radius: 0px !important;
   background-color: $blue_light !important;
+  cursor: default;
 }
 
 .notepad_cont::-webkit-scrollbar-thumb:hover,
 .editor-preview::-webkit-scrollbar-thumb:hover,
-.CodeMirror-scroll::-webkit-scrollbar-thumb:hover {
+.CodeMirror-scroll::-webkit-scrollbar-thumb:hover,
+.events__calendar::-webkit-scrollbar-thumb:hover,
+textarea::-webkit-scrollbar-thumb:hover {
   background-color: $blue_light !important;
+  cursor: default;
 }
 
 .notepad_cont::-webkit-resizer,
 .editor-preview::-webkit-resizer,
-.CodeMirror-scroll::-webkit-resizer {
-  background-image:url('') !important;
-  background-repeat:no-repeat !important;
+.CodeMirror-scroll::-webkit-resizer,
+.events__calendar::-webkit-resizer,
+textarea::-webkit-resizer {
+  background-image :url('') !important;
+  background-repeat: no-repeat !important;
   width: 10px !important;
   height: 0px !important;
 }
 
 .notepad_cont::-webkit-scrollbar,
 .editor-preview::-webkit-scrollbar,
-.CodeMirror-scroll::-webkit-scrollbar {
+.CodeMirror-scroll::-webkit-scrollbar,
+.events__calendar::-webkit-scrollbar,
+textarea::-webkit-scrollbar {
   width: 10px !important;
 }
 

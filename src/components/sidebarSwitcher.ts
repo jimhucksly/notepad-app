@@ -25,27 +25,36 @@ export default class SidebarSwitcher extends Vue {
       id: 2
     },
     {
+      name: 'events',
+      nameAlt: 'Events',
+      id: 3
+    },
+    {
       name: 'jsonViewer',
       nameAlt: 'Json Viewer',
-      id: 3
+      id: 4
     }
   ]
 
   private isExpand: boolean = false
 
   get isProjects() {
-    return this.$store.getters.isProjectsShowed
+    return this.$store.getters.getIsProjectsShow
   }
   get isMarkdown() {
-    return this.$store.getters.isMarkdownShowed
+    return this.$store.getters.getIsMarkdownShow
+  }
+  get isEvents() {
+    return this.$store.getters.getIsEventsShow
   }
   get isJsonViewer() {
-    return this.$store.getters.isJsonViewerShowed
+    return this.$store.getters.getIsJsonViewerShow
   }
   get current() {
     if(this.isProjects) return 1
     if(this.isMarkdown) return 2
-    if(this.isJsonViewer) return 3
+    if(this.isEvents) return 3
+    if(this.isJsonViewer) return 4
     return 1
   }
   get legendInternal() {

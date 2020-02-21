@@ -72,8 +72,8 @@
   }
 }
 
-input[type="text"],
-input[type="password"] {
+input[type=text],
+input[type=password] {
   border: 1px solid #ccc;
   height: 30px;
   font-size: 14px;
@@ -87,6 +87,11 @@ input[type="password"] {
   &[readonly] {
     color: #bbb;
   }
+}
+
+input[type=text]:not([readonly]):focus,
+input[type=password]:not([readonly]):focus {
+  border-color: $blue_light;
 }
 
 input[type="file"] {
@@ -122,7 +127,7 @@ textarea {
 .btn-primary {
   background-color: $blue_light;
   &:hover {
-    background-color: $blue;
+    background-color: lighten($blue_light, 5%);
   }
 }
 

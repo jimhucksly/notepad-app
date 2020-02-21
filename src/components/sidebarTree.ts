@@ -21,6 +21,7 @@ export default class SidebarTreeComponent extends Vue {
   level!: number
 
   protected selectNode(item: any) {
+    this.$electron.ipcRenderer.send('codemirror-link-click', item.name)
     const editor = document.querySelector('.editor-preview')
     if(editor) {
       const link: any = editor.querySelector(`a[href*=${item.slug}]`)
@@ -29,17 +30,10 @@ export default class SidebarTreeComponent extends Vue {
         const node = this.$refs[item.id][0]
         const ul = node.nextElementSibling
         const isExpanded = node.classList.contains('expanded')
-        if(isExpanded) {
-          node.classList.remove('expanded')
-          node.classList.remove('tree_item_minus')
-          node.classList.add('tree_item_plus')
-          this.$slideUp(ul, 200)
-        } else {
-          node.classList.add('expanded')
-          node.classList.add('tree_item_minus')
-          node.classList.remove('tree_item_plus')
-          this.$slideDown(ul, 200)
-        }
+        node.classList[isExpanded ? 'remove' : 'add']('expanded')
+        node.classList[isExpanded ? 'remove' : 'add']('tree_item_minus')
+        node.classList[isExpanded ? 'add' : 'remove']('tree_item_plus')
+        this[isExpanded ? '$slideUp' : '$slideDown'](ul, 200)
       }
     }
   }

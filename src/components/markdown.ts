@@ -80,7 +80,7 @@ const config: any = {
     }
   ],
   autosave: {
-    enabled: true,
+    enabled: false,
     uniqueId: 'MyUniqueID',
     delay: 1000
   },
@@ -112,6 +112,7 @@ const config: any = {
 export default class Markdown extends Vue {
   editor: any = null
   isRendered: boolean = false
+  links: string[] = []
 
   get initialValue() {
     return this.$store.getters.getMd
@@ -119,8 +120,6 @@ export default class Markdown extends Vue {
 
   @Watch('initialValue')
   onInitialValueCahnged() {
-    this.editor.value()
-    this.editor.togglePreviewHandler()
     this.editor.togglePreviewHandler()
     this.buildTree()
   }
@@ -163,7 +162,9 @@ export default class Markdown extends Vue {
       const toolbarItemPreview = this.editor.toolbar.find((item: any) => item.name === 'preview')
       if(toolbarItemPreview) {
         toolbarItemPreview.action = () => {
-          this.editor.togglePreviewHandler((isActive: boolean) => { isActive && this.buildTree() })
+          this.editor.togglePreviewHandler((isActive: boolean) => {
+            isActive && this.buildTree()
+          })
         }
       }
       const toolbarItemSave = this.editor.toolbar.find((item: any) => item.name === 'save')
@@ -181,7 +182,6 @@ export default class Markdown extends Vue {
                 const savedSatus = statusBar.querySelector('.saved-status')
                 const message = 'Markdown is successfully saved!'
                 savedSatus && (savedSatus.innerHTML = message)
-
                 setTimeout(() => {
                   savedSatus && (savedSatus.innerHTML = '')
                 }, 3000)
@@ -189,17 +189,53 @@ export default class Markdown extends Vue {
             })
         }
       }
-      this.isRendered = true
       this.buildTree()
-      // autosaveTimeout = null
-      // this.editor.codemirror.on('change', () => {
-      //   clearTimeout(autosaveTimeout)
-      //   autosaveTimeout = setTimeout(() => {
-      //     this.$store.dispatch('md', this.editor.value())
-      //   }, 1000)
-      // })
+      this.isRendered = true
+      const cm: any = this.editor.codemirror
+      const doc: any = cm.getDoc()
+      const count = doc.lineCount()
+      const linkedDoc = doc.linkedDoc({
+        from: 0,
+        to: count
+      })
+
+      const result: any = []
+
+      const linked = (o: any) => {
+        if(o.children) {
+          const arr = o.children
+          arr.forEach((item: any) => {
+            if(item.lines) {
+              item.lines.forEach((line: any) => {
+                result.push(line.text)
+              })
+            }
+            if(item.children) {
+              linked(item)
+            }
+          })
+        }
+      }
+      linked(linkedDoc)
+      this.links = result
+
+      this.$electron.ipcRenderer.on('codemirror-link-click', (event: any, text: string) => {
+        let scrolling: boolean = false
+        this.links.forEach((link: string, index: number): void | null => {
+          if(scrolling) return null
+          if(link.indexOf(text) > -1) {
+            scrolling = true
+            this.editor.codemirror.scrollIntoView({ line: index, char: 0 }, 200)
+            if(index > 0) {
+              const scrollInfo = this.editor.codemirror.getScrollInfo()
+              this.editor.codemirror.scrollTo(0, scrollInfo.top + scrollInfo.clientHeight / 2)
+            }
+          }
+        })
+      })
     }
   }
+
   beforeDestroy() {
     this.$store.dispatch('mdTree', [])
     this.$store.dispatch('action', {
@@ -207,9 +243,33 @@ export default class Markdown extends Vue {
       data: this.editor.value()
     })
   }
+
   created() {
     this.$store.dispatch('action', {
       type: 'GET_MD'
     })
+  }
+
+  render(h: any) {
+    return h(
+      'div',
+      {
+        staticClass: 'editor_wrapper',
+        style: {
+          display: this.isRendered ? 'flex' : 'none'
+        }
+      },
+      [
+        h(
+          'textarea',
+          {
+            attrs: {
+              name: 'editor',
+              id: 'editor'
+            }
+          }
+        )
+      ]
+    )
   }
 }

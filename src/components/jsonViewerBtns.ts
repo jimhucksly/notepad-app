@@ -62,4 +62,8 @@ export default class JsonViewerBtns extends Vue {
       }
     })
   }
+
+  protected clear() {
+    this.$electron.ipcRenderer.send('json-viewer-clear')
+  }
 }

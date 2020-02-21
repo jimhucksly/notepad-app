@@ -21,6 +21,13 @@ html {
   z-index: 1;
 }
 
+.non-selectable {
+  -ms-user-select: none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+}
+
 main {
   display: flex;
   flex-grow: 1;
@@ -183,7 +190,7 @@ main {
 .title {
   font-size: 16px;
   font-weight: bold;
-  margin-bottom: 30px;
+  // margin-bottom: 30px;
   flex-shrink: 0;
 }
 
@@ -193,6 +200,12 @@ main {
   justify-content: center;
   height: 100%;
   background-color: #eee;
+
+
+  .title {
+    margin-bottom: 30px;
+    text-align: center;
+  }
 }
 
 #notepad_cont {
@@ -482,25 +495,22 @@ main {
     flex-basis: 50%;
   }
 
-  .json_viewer_src {
-    border-right: 2px solid $blue-gray;
-
-    &:after {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: -3px;
-      display: block;
-      width: 2px;
-      height: 100%;
-      background-color: darken($dark, 5%);
-      z-index: 999;
-    }
+  .json_viewer_separator {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: block;
+    width: 5px;
+    height: 100%;
+    background-color: darken($dark, 5%);
+    border-left: 1px solid $blue-gray;
+    border-right: 1px solid $blue-gray;
+    z-index: 999;
+    cursor: e-resize;
   }
 
   .json_viewer_res {
     padding: 6px;
-    border-left: 2px solid $blue-gray;
     background-color: $editor_dark;
     max-height: 100%;
     overflow: auto;
@@ -583,5 +593,128 @@ main {
     .json-formatter-empty {
       color: #eee;
     }
+  }
+}
+
+.events {
+  display: flex;
+  flex-direction: column;
+
+  .events__top {
+    display: flex;
+    flex-basis: 53px;
+    flex-shrink: 0;
+    padding: 0 10px;
+  }
+  .events__btns {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    button {
+      position: relative;
+
+      span {
+        display: flex;
+        position: absolute;
+        align-items: center;
+        justify-content: center;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+
+        &:after {
+          content: '';
+          display: block;
+          width: 6px;
+          height: 8px;
+          border-top: 4px solid transparent;
+          border-bottom: 4px solid transparent;
+        }
+      }
+    }
+
+    .events__btn-left {
+      width: 30px;
+      height: 30px;
+      span {
+        &:after {
+          border-right: 6px solid #fff;
+        }
+      }
+    }
+    .events__btn-right {
+      width: 30px;
+      height: 30px;
+      span {
+        &:after {
+          border-left: 6px solid #fff;
+        }
+      }
+    }
+  }
+  .events__header {
+    padding: 0 15px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    width: 120px;
+    text-align: center;
+  }
+  .events__search {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-grow: 2;
+
+    form {
+      position: relative;
+      width: 100%;
+      max-width: 300px;
+    }
+
+    input {
+      width: 100%;
+    }
+
+    .events__search-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      margin-top: -1px;
+      border: 1px solid #ccc;
+      background-color: #fff;
+      z-index: 999;
+
+      ul {
+        li {
+          cursor: pointer;
+          font-size: 0.9rem;
+          padding: 8px 4px;
+          border-bottom: 1px solid #ccc;
+
+          &:last-child {
+            border-bottom-color: transparent;
+          }
+
+          &:hover {
+            background-color: #eee;
+          }
+
+          &.not-clickable {
+            cursor: default;
+            &:hover {
+              background-color: #fff;
+            }
+          }
+        }
+      }
+    }
+  }
+  .events__calendar {
+    position: relative;
+    flex-basis: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 }

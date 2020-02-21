@@ -10,6 +10,7 @@
           <preferences v-else-if="isPreferences" />
           <notepad v-else-if="isProjects" />
           <markdown v-else-if="isMarkdown" />
+          <events v-else-if="isEvents" />
           <json-viewer v-else-if="isJsonViewer" />
           <div v-else></div>
         </template>

@@ -14,6 +14,8 @@ declare function downloadFile(
   loaderDOMElement: any
 )
 declare function uploadingFile(received: number, total: number)
+declare function upperFirst(s: string): string
+declare function lowerFirst(s: string): string
 
 export {
   translit,
@@ -23,5 +25,7 @@ export {
   getFileType,
   dragAndDropLoader,
   downloadFile,
-  uploadingFile
+  uploadingFile,
+  upperFirst,
+  lowerFirst
 }

@@ -1,0 +1,15 @@
+<svg
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.1"
+   id="Layer_1"
+   x="0px"
+   y="0px"
+   viewBox="0 0 37 37"
+   xml:space="preserve"
+   width="74"
+   height="74">
+  <path style="fill:#7bae73;fill-opacity:1" d="M 0.44776119,36.641791 V 0.64179104 H 36.447761 V 36.641791 Z"/>
+  <path style="fill:#ffffff" d="m 23.985761,27.588791 c 0.692,1.124 1.444,2.201 3.037,2.201 1.338,0 2.04,-0.665 2.04,-1.585 0,-1.101 -0.726,-1.492 -2.198,-2.133 l -0.807,-0.344 c -2.329,-0.988 -3.878,-2.226 -3.878,-4.841 0,-2.41 1.845,-4.244 4.728,-4.244 2.053,0 3.528,0.711 4.592,2.573 l -2.514,1.607 c -0.553,-0.988 -1.151,-1.377 -2.078,-1.377 -0.946,0 -1.545,0.597 -1.545,1.377 0,0.964 0.6,1.354 1.985,1.951 l 0.807,0.344 c 2.745,1.169 4.293,2.363 4.293,5.047 0,2.892 -2.284,4.477 -5.35,4.477 -2.999,0 -4.702,-1.505 -5.65,-3.368 z"/>
+  <path style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.51215309;stroke-linecap:square;stroke-miterlimit:8;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill" d="m 8.2309059,16.705114 v 2.948576 h 4.6101161 v 12.892265 h 3.374912 V 19.65369 h 4.577995 v -2.948576 z"/>
+</svg>

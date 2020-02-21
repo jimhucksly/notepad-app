@@ -13,14 +13,14 @@ Vue.component('PopupTitle', {
 })
 export default class Popup extends Vue {
   get aboutPopupShow() {
-    return this.$store.getters['getAboutPopupShow']
+    return this.$store.getters.getIsAboutPopupShow
   }
   get uploadingPopupShow() {
-    return this.$store.getters['getUploadingPopupShow']
+    return this.$store.getters.getIsUploadingPopupShow
   }
   get showPopup() {
-    let flags = ['aboutPopupShow', 'uploadingPopupShow']
-    return flags.map(key => this[key]).reduce((res, el) => res || Boolean(el))
+    const flags: string[] = ['aboutPopupShow', 'uploadingPopupShow']
+    return flags.map((key: string) => this[key]).reduce((res, el) => res || Boolean(el))
   }
   get appName() {
     return this.$electron.remote.getCurrentWindow().getTitle()

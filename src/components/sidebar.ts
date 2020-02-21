@@ -17,16 +17,16 @@ export default class Sidebar extends Vue {
   isSwitcherMenuExpanded: boolean = false
 
   get isPreferences() {
-    return this.$store.getters.isPreferencesShowed
+    return this.$store.getters.getIsPreferencesShow
   }
   get isProjects() {
-    return this.$store.getters.isProjectsShowed
+    return this.$store.getters.getIsProjectsShow
   }
   get isMarkdown() {
-    return this.$store.getters.isMarkdownShowed
+    return this.$store.getters.getIsMarkdownShow
   }
   get isJsonViewer() {
-    return this.$store.getters.isJsonViewerShowed
+    return this.$store.getters.getIsJsonViewerShow
   }
   get mdTree() {
     return this.$store.getters.getMdTree

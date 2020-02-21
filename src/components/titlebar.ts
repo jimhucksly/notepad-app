@@ -7,7 +7,7 @@ import { remote } from 'electron'
 })
 export default class Titlebar extends Vue {
   get isAuth() {
-    return this.$store.getters.getAuth
+    return this.$store.getters.getIsAuth
   }
   get preferencesShow() {
     return this.$store.getters.isPreferencesShowed
@@ -30,7 +30,9 @@ export default class Titlebar extends Vue {
     if(document && document.getElementById) {
       const menuBtn = document.getElementById('menu-button')
       menuBtn && menuBtn.addEventListener('click', (event) => {
-        window && window.appMenu && window.appMenu.popup(this.$electron.remote.screen, event.x, event.y)
+        this.$electron.ipcRenderer.send('menu-popup', {
+          window: this.$electron.remote.getCurrentWindow()
+        })
       })
 
       const minimizeBtn = document.getElementById('minimize-button')

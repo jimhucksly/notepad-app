@@ -3,37 +3,49 @@
   "env": {
     "test": {
       "presets": [
-        ["env", {
-          "targets": { "node": 7 }
-        }],
-        "stage-0"
+        [
+          "@babel/preset-env",
+          {
+            "modules": "commonjs",
+            "targets": {
+              "node": "current"
+            }
+          }
+        ]
       ],
-      "plugins": ["istanbul"]
+      "plugins": [
+        [
+          "module-resolver",
+          {
+            "root": ["./src"],
+            "alias": {
+              "~": "./src"
+            }
+          }
+        ],
+        ["@babel/plugin-proposal-decorators", { "legacy": true }],
+        ["@babel/plugin-proposal-class-properties", { "loose": true }]
+      ]
     },
     "main": {
       "presets": [
-        ["env", {
+        ["@babel/preset-env", {
           "targets": { "node": 7 }
-        }],
-        "stage-0"
+        }]
       ]
     },
     "renderer": {
       "presets": [
-        ["env", {
-          "modules": false
-        }],
-        "stage-0"
+        ["@babel/preset-env", { "modules": false }]
       ]
     },
     "web": {
       "presets": [
-        ["env", {
-          "modules": false
-        }],
-        "stage-0"
+        ["@babel/preset-env", { "modules": false }]
       ]
     }
   },
-  "plugins": ["transform-runtime"]
+  "plugins": [
+    "@babel/plugin-transform-runtime"
+  ]
 }

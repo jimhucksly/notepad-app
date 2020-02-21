@@ -1,7 +1,7 @@
 'use strict'
 
-import { app, BrowserWindow, Tray, ipcMain, Menu, dialog,
-  nativeImage, globalShortcut } from 'electron'
+import { app, BrowserWindow, Tray, ipcMain, Menu, MenuItem,
+  dialog, nativeImage, globalShortcut } from 'electron'
 import path from 'path'
 import pkg from '../package.json'
 
@@ -127,9 +127,44 @@ app.on('window-all-closed', () => {
 
 app.on('browser-window-created', (e, window) => {
   window.setMenu(null)
-  // window.setIcon(icon)
   window.setOverlayIcon(null, '')
   window.setTitle(pkg.build.productName)
+
+  const submenu = new Menu()
+  submenu.append(new MenuItem({
+    label: 'Preferences...',
+    click: () => {
+      const appMenu = Menu.getApplicationMenu()
+      const menuItemFile = appMenu.items.find(item => item.label === 'File')
+      const menuItemReload = menuItemFile.submenu.items.find(item => item.label === 'Reload')
+      menuItemReload.visible = false
+      window.webContents.send('preferences-show')
+    }
+  }))
+  submenu.append(new MenuItem({
+    label: 'Reload',
+    click: () => {
+      window.webContents.send('reload')
+    }
+  }))
+  submenu.append(new MenuItem({
+    label: 'Sign Out',
+    click: () => {
+      window.webContents.send('sign-out')
+    }
+  }))
+  const menu = new Menu()
+  menu.append(new MenuItem({
+    label: 'File',
+    submenu
+  }))
+  menu.append(new MenuItem({
+    label: 'About',
+    click: () => {
+      window.webContents.send('about')
+    }
+  }))
+  Menu.setApplicationMenu(menu)
 })
 
 app.on('activate', () => {
@@ -151,6 +186,21 @@ app.on('before-quit', () => {
 
 app.setPath('userData', path.resolve(app.getPath('userData'), '../JimhuckslyStudio/notepad-app'))
 
+ipcMain.on('menu-popup', (event, { window }) => {
+  const appMenu = Menu.getApplicationMenu()
+  appMenu.popup(window)
+})
+
+ipcMain.on('context-menu-popup', (event, { window }) => {
+  const contextMenu = new Menu()
+  contextMenu.append(new MenuItem({
+    label: 'Copy',
+    accelerator: 'CmdOrCtrl+C',
+    role: 'copy'
+  }))
+  contextMenu.popup(window)
+})
+
 ipcMain.on('authorized', () => {
   const appMenu = Menu.getApplicationMenu()
   const menuItemFile = appMenu.items.find(item => item.label === 'File')
@@ -161,13 +211,6 @@ ipcMain.on('unauthorized', () => {
   const appMenu = Menu.getApplicationMenu()
   const menuItemFile = appMenu.items.find(item => item.label === 'File')
   menuItemFile.visible = false
-})
-
-ipcMain.on('preferences-show', () => {
-  const appMenu = Menu.getApplicationMenu()
-  const menuItemFile = appMenu.items.find(item => item.label === 'File')
-  const menuItemReload = menuItemFile.submenu.items.find(item => item.label === 'Reload')
-  menuItemReload.visible = false
 })
 
 ipcMain.on('preferences-hide', () => {
@@ -220,6 +263,9 @@ ipcMain.on('json-viewer-src-set', (event, txt) => {
 })
 ipcMain.on('json-viewer-save', (event, fileName) => {
   event.sender.send('json-viewer-save', fileName)
+})
+ipcMain.on('json-viewer-clear', (event) => {
+  event.sender.send('json-viewer-clear')
 })
 
 ipcMain.on('set-icon-notification', () => {
@@ -275,4 +321,8 @@ ipcMain.on('open-dialog-unlock-confirm', (event) => {
       event.sender.send('unlock-is-confimed')
     }
   })
+})
+
+ipcMain.on('codemirror-link-click', (event, text) => {
+  event.sender.send('codemirror-link-click', text)
 })

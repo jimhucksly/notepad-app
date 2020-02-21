@@ -2,7 +2,7 @@
   <div class="notepad_item_btns">
     <button
       v-if="collection.includes('save')"
-      v-show="editable_items.includes(itemKey)"
+      v-show="editableItems.includes(itemKey)"
       @click.prevent="save($event, itemKey)"
       >
       <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
@@ -19,7 +19,7 @@
     </button>
     <button
       v-if="collection.includes('edit')"
-      v-show="!editable_items.includes(itemKey)"
+      v-show="!editableItems.includes(itemKey)"
       @click.prevent="edit($event, itemKey)">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26" version="1.1">
         <g class="g1" style="fill: #2766BA">

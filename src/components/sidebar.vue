@@ -18,9 +18,9 @@
       <sidebar-tree :tree="mdTree" />
     </div>
     <json-viewer-btns
+      class="json_viewer"
       v-show="!isPreferences && isJsonViewer"
       :style="{opacity: isSwitcherMenuExpanded ? 0.4 : 1}"
-      class="json_viewer"
     />
   </aside>
 </template>

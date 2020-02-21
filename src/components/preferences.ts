@@ -20,10 +20,10 @@ export default class Preferences extends Vue {
   }
 
   get userDataPath() {
-    return this.$store.getters['getUserDataPath']
+    return this.$store.getters.getUserDataPath
   }
   get downloadsTargetPath() {
-    return this.$store.getters['getDownloadsTargetPath']
+    return this.$store.getters.getDownloadsTargetPath
   }
 
   protected save() {
@@ -42,7 +42,7 @@ export default class Preferences extends Vue {
       })
     }
 
-    const valid = Object.keys(this.errors).map(key => this.errors[key]).reduce((a, b) => a + b) === 0
+    const valid = Object.keys(this.errors).map((key: string) => this.errors[key]).reduce((a, b) => a + b) === 0
     if(valid) {
       storage.append(this.userDataPath, 'UserPreferences', {
         downloadsTargetPath: this.preferences.downloadsTargetPath
@@ -67,7 +67,7 @@ export default class Preferences extends Vue {
   }
 
   mounted() {
-    this.preferences.downloadsTargetPath = this.$store.getters['getDownloadsTargetPath']
-    this.defaults.downloadsTargetPath = this.$store.getters['getDownloadsTargetPath']
+    this.preferences.downloadsTargetPath = this.$store.getters.getDownloadsTargetPath
+    this.defaults.downloadsTargetPath = this.$store.getters.getDownloadsTargetPath
   }
 }

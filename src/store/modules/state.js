@@ -1,24 +1,20 @@
+import { stateKeys } from './index'
+
 const state = {
   loading: true,
-  isAuth: false,
-  token: null,
+  isProjectsShow: true,
   userDataPath: '',
-  isDevelopment: false,
-  json: null,
+  downloadsTargetPath: '',
   md: '',
   mdTree: [],
   filter: {},
-  unread: {},
-  aboutPopupShow: false,
-  uploadingPopupShow: false,
-  preferencesShow: false,
-  projectsShow: true,
-  markdownShow: false,
-  jsonViewerShow: false,
-  downloadsTargetPath: '',
-  interval: null,
-  notification: false,
-  error: false
+  unread: {}
 }
+
+stateKeys.forEach(key => {
+  if(state[key] === undefined) {
+    state[key] = null
+  }
+})
 
 export default state

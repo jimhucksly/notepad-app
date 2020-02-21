@@ -22,11 +22,11 @@ export default class Projects extends Vue {
       const o = {
         [stamp]: {
           key: stamp,
-          date: this.json[stamp]['date'],
+          date: this.json[stamp].date,
           name: this.names[stamp],
-          lock: this.json[stamp]['lock'],
-          message: this.json[stamp]['message'],
-          file: this.json[stamp]['file']
+          lock: this.json[stamp].lock,
+          message: this.json[stamp].message,
+          file: this.json[stamp].file
         }
       }
       this.$store.dispatch('json', { ...this.json, ...o })
@@ -38,7 +38,7 @@ export default class Projects extends Vue {
       item.classList.add('edit')
       this.names = {
         ...this.names,
-        [stamp]: this.json[stamp]['name'] || this.json[stamp]['key']
+        [stamp]: this.json[stamp].name || this.json[stamp].key
       }
     }
   }
@@ -50,11 +50,11 @@ export default class Projects extends Vue {
       const o = {
         [stamp]: {
           key: stamp,
-          date: this.json[stamp]['date'],
-          name: this.json[stamp]['name'],
+          date: this.json[stamp].date,
+          name: this.json[stamp].name,
           lock: !isLocked,
-          message: this.json[stamp]['message'],
-          file: this.json[stamp]['file']
+          message: this.json[stamp].message,
+          file: this.json[stamp].file
         }
       }
       this.$store.dispatch('json', { ...this.json, ...o })

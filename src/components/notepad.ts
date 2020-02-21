@@ -13,16 +13,16 @@ import File from '~/components/file'
 })
 export default class Notepad extends Vue {
   message: string = ''
-  new_message_flag: boolean = false
+  newMsgFlag: boolean = false
 
   get json() {
-    return this.$store.getters['getJson']
+    return this.$store.getters.getJson
   }
   get filter() {
-    return this.$store.getters['getFilter']
+    return this.$store.getters.getFilter
   }
   get isError() {
-    return this.$store.getters['getError']
+    return this.$store.getters.getError
   }
   get hasFilter() {
     return !isEmpty(this.filter)
@@ -30,32 +30,32 @@ export default class Notepad extends Vue {
 
   @Watch('hasFilter')
   onHasFilterChanged(flag: boolean) {
-    const notepad_cont: any = this.$refs.notepad_cont
     if(flag) {
-      notepad_cont.scrollTo(0, 0)
+      const notepadCont: any = this.$refs.notepad_cont
+      notepadCont.scrollTo(0, 0)
     } else {
       this.$nextTick(() => {
-        const notepad_cont: any = this.$refs.notepad_cont
-        notepad_cont.scrollTop = notepad_cont.scrollHeight
+        const notepadCont: any = this.$refs.notepad_cont
+        notepadCont.scrollTop = notepadCont.scrollHeight
       })
     }
   }
 
   protected send(): void | null {
     if(!this.message.length) return null
-    this.new_message_flag = true
+    this.newMsgFlag = true
     const {date, stamp} = now()
     const o = {
       [stamp]: {
         key: stamp,
-        date: date,
+        date,
         name: '',
         lock: false,
         message: checkLinks(this.message)
       }
     }
     this.message = ''
-    this.$store.dispatch('json', Object.assign({}, this.json, o))
+    this.$store.dispatch('json', { ...this.json, ...o })
     this.$nextTick(() => {
       const notepad_cont: any = this.$refs.notepad_cont
       notepad_cont.scrollTop = notepad_cont.scrollHeight
@@ -74,22 +74,22 @@ export default class Notepad extends Vue {
     this.upload(formData, getFileType(files[0].name))
   }
   protected addFile(name: string, link: string, type: string) {
-    this.new_message_flag = true
+    this.newMsgFlag = true
     const {date, stamp} = now()
     const o = {
       [stamp]: {
         key: stamp,
-        date: date,
-        name: name,
+        date,
+        name,
         lock: false,
         file: {
-          name: name,
-          link: link,
-          type: type
+          name,
+          link,
+          type
         }
       }
     }
-    this.$store.dispatch('json', Object.assign({}, this.json, o))
+    this.$store.dispatch('json', { ...this.json, ...o })
     this.$nextTick(() => {
       const notepad_cont: any = this.$refs.notepad_cont
       notepad_cont.scrollTop = notepad_cont.scrollHeight
@@ -103,9 +103,7 @@ export default class Notepad extends Vue {
     try {
       const sResponse = await this.$store.dispatch('action', {
         type: 'FILE',
-        data: {
-          file: file
-        }
+        data: { file }
       })
       if(sResponse && sResponse.filename && sResponse.link) {
         this.addFile(sResponse.filename, sResponse.link, fileType)
@@ -145,6 +143,8 @@ export default class Notepad extends Vue {
     notepad_cont.scrollTop = notepad_cont.scrollHeight
     dragAndDropLoader('notepad_cont', 'hightlight', this.onFileChange)
 
+    window.ondragstart = () => false
+
     notepad_cont.addEventListener('click', (e: any) => {
       const isLink = e.target.tagName === 'A'
       const hasHref = e.target.href && e.target.href.length
@@ -157,7 +157,7 @@ export default class Notepad extends Vue {
         if(item) {
           const loader = item.querySelector('.file_loader')
           const fileName = e.target.dataset.filename
-          const finalPath = this.$store.getters['getDownloadsTargetPath'] + '\\' + fileName
+          const finalPath = this.$store.getters.getDownloadsTargetPath + '\\' + fileName
           downloadFile(href, finalPath, loader)
         } else {
           this.$electron.shell.openExternal(e.target.href)

@@ -9,8 +9,12 @@ declare module "*.vue" {
 declare module 'vue/types/vue' {
   interface Vue {
     $store: Vuex.Store<RootState>
-    $electron: any,
-    $slideUp: Function,
+    $electron: any
+    $popup: {
+      open: (s :string) => {}
+      close: (s: string) => {}
+    }
+    $slideUp: Function
     $slideDown: Function
   }
 }

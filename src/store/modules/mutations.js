@@ -1,63 +1,29 @@
+import { stateKeys } from './index'
+import { upperFirst } from '~/helpers'
+
 const mutations = {
-  setLoading(state, flag) {
-    state.loading = flag
-  },
-  setAuth(state, flag) {
-    state.isAuth = flag
-  },
-  setToken(state, value) {
-    state.token = value
-  },
-  setUserDataPath(state, path) {
-    state.userDataPath = path
-  },
-  setError(state, flag) {
-    state.error = flag
-  },
-  setIsDevelopment(state, flag) {
-    state.isDevelopment = flag
-  },
   setJson(state, json) {
     state.json = {}
-    state.json = Object.assign({}, json)
+    state.json = { ...json }
   },
-  setMd(state, data) {
-    state.md = data
-  },
-  setMdTree(state, tree) {
-    state.mdTree = tree
+  setEvents(state, data) {
+    state.events = {}
+    state.events = { ...data }
   },
   setFilter(state, object) {
     state.filter = {}
     state.filter = Object.assign({}, object)
-  },
-  setInterval(state, int) {
-    state.interval = int
-  },
-  setNotification(state, flag) {
-    state.notification = flag
-  },
-  setAboutPopupShow(state, flag) {
-    state.aboutPopupShow = flag
-  },
-  setUploadingPopupShow(state, flag) {
-    state.uploadingPopupShow = flag
-  },
-  setPreferencesShow(state, flag) {
-    state.preferencesShow = flag
-  },
-  setProjectsShow(state, flag) {
-    state.projectsShow = flag
-  },
-  setMarkdownShow(state, flag) {
-    state.markdownShow = flag
-  },
-  setJsonViewerShow(state, flag) {
-    state.jsonViewerShow = flag
-  },
-  setDownloadsTargetPath(state, path) {
-    state.downloadsTargetPath = path
   }
 }
+
+stateKeys.forEach(key => {
+  const commitKey = 'set' + upperFirst(key)
+
+  if(mutations[commitKey] === undefined) {
+    mutations[commitKey] = (state, peyload) => {
+      state[key] = peyload
+    }
+  }
+})
 
 export default mutations

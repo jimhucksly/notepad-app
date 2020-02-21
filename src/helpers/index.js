@@ -67,6 +67,8 @@ export const getFileType = (name) => {
   if(/\.gif$/.test(name)) return 'image'
   if(/\.html?$/.test(name)) return 'html'
   if(/\.js$/.test(name)) return 'js'
+  if(/\.d\.ts$/.test(name)) return 'dts'
+  if(/\.ts$/.test(name)) return 'ts'
   if(/\.json$/.test(name)) return 'json'
   if(/\.vue$/.test(name)) return 'vue'
   if(/\.css$/.test(name)) return 'css'
@@ -284,4 +286,18 @@ export const uniqueid = (len) => {
     }
   } while(idstr.length < len)
   return (idstr)
+}
+
+export const upperFirst = (s) => {
+  if(s.toString === undefined) return ''
+  s = s.toString()
+  if(!s.length) return ''
+  return s.charAt(0).toUpperCase() + s.slice((s.length - 1) * -1)
+}
+
+export const lowerFirst = (s) => {
+  if(s.toString === undefined) return ''
+  s = s.toString()
+  if(!s.length) return ''
+  return s.charAt(0).toLowerCase() + s.slice((s.length - 1) * -1)
 }
