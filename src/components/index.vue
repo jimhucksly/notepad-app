@@ -12,6 +12,7 @@
           <markdown v-else-if="isMarkdown" />
           <events v-else-if="isEvents" />
           <json-viewer v-else-if="isJsonViewer" />
+          <links v-else-if="isLinks" />
           <div v-else></div>
         </template>
         <error v-if="isError" />

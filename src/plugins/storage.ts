@@ -1,14 +1,6 @@
 const fs = require('fs')
 const path = require('path')
 
-// interface IStorage {
-//   isPathExists(_path: string): Promise<void>;
-//   isFileExists(_path: string, _file: string): Promise<void>;
-//   append(_path: string, fileName: string, json: object): Promise<void>;
-//   set(_path:string, fileName:string, json: object): Promise<void>;
-//   get(_path: string, _file: string, key: string): Promise<void>;
-// }
-
 class Storage  {
   public isPathExists(_path: string): Promise<object> {
     return new Promise((resolve, reject) => {

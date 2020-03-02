@@ -59,7 +59,7 @@ export default class App extends Vue {
   }
 
   beforeDestroy() {
-    this.$store.dispatch('interval', null)
+    this.$store.dispatch('timeout', null)
   }
 
   render(h: any) {

@@ -5,19 +5,6 @@ import { Vue, Component } from 'vue-property-decorator'
 })
 export default class JsonViewerBtns extends Vue {
   protected open() {
-    // this.$electron.ipcRenderer.send('open-file-dialog', {})
-    // this.$electron.ipcRenderer.on('open-dialog-file-selected', (e: any, resp: any) => {
-    //   if(resp && resp.filePaths && resp.filePaths[0]){
-    //     fs.readFile(resp.filePaths[0], 'utf-8', (err: any, data: any) => {
-    //       if(err) {
-    //         alert('An error ocurred reading the file :' + err.message)
-    //         return
-    //       }
-    //       this.$electron.ipcRenderer.send('json-viewer-src-set', data)
-    //     })
-    //   }
-    // })
-
     const openFile = () => {
       const element = document.createElement('input')
       element.type = 'file'

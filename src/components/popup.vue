@@ -28,6 +28,23 @@
         <span></span>
       </div>
     </div>
+    <div class="popup-link-add" v-if="linkAddPopupShow">
+      <popup-title>
+        Add link
+        <close-btn @click="$popup.close('linkAdd')"></close-btn>
+      </popup-title>
+      <form>
+        <div class="m-b-15">
+          <input type="text" v-model="linkUrl" placeholder="URL">
+        </div>
+        <div class="m-b-15">
+          <input type="text" v-model="linkName" placeholder="Name">
+        </div>
+        <div class="flex-end">
+          <button class="btn btn-primary" @click.prevent="addLink">Save</button>
+        </div>
+      </form>
+    </div>
   </div>
 </template>
 <script src="./popup.ts" lang="ts"></script>

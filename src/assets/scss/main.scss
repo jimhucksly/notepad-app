@@ -56,11 +56,16 @@ main {
 }
 
 .popup-title-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
   min-height: 30px;
   width: 100%;
   background-color: #000;
   margin-bottom: 15px;
+  color: #fff;
+  font-size: 1rem;
 }
 
 .popup-close-btn {
@@ -154,6 +159,23 @@ main {
       font-size: 12px;
       white-space: nowrap;
     }
+  }
+}
+
+.popup-link-add {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+  top: 20%;
+  left: 50%;
+  margin-left: -250px;
+  padding-bottom: 15px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  box-shadow: 0px 0px 25px 2px rgba(0, 0, 0, 0.1);
+  form {
+    padding: 6px;
   }
 }
 
@@ -659,6 +681,7 @@ main {
     font-size: 0.9rem;
     width: 120px;
     text-align: center;
+    white-space: nowrap;
   }
   .events__search {
     display: flex;
@@ -716,5 +739,83 @@ main {
     flex-basis: 100%;
     overflow-x: hidden;
     overflow-y: auto;
+  }
+}
+
+.links_cont {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  flex-grow: 1;
+  padding: 6px;
+  padding-right: 0;
+  background-color: #eee;
+  overflow: hidden;
+
+  .links_area {
+    flex-basis: 100%;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-right-width: 0;
+    padding: 12px;
+    padding-right: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    ul {
+      li {
+        display: flex;
+        align-items: center;
+        padding-left: 6px;
+        transition: all 0.2s;
+        a {
+          display: block;
+          flex-basis: 100%;
+          font-size: 1.1rem;
+          padding: 6px 0;
+          color: $dark;
+          text-decoration: none;
+          transition: all 0.2s;
+
+          &:hover {
+            color: $blue;
+          }
+        }
+        button {
+          display: none;
+          align-items: center;
+          justify-content: center;
+          width: 22px;
+          height: 22px;
+          flex-shrink: 0;
+          margin-right: 12px;
+          transition: all 0.2s;
+          cursor: pointer;
+          border: none;
+          background: none;
+          padding: 0;
+          opacity: 0.4;
+          &:hover {
+            opacity: 0.9;
+          }
+          svg {
+            display: block;
+            width: 100%;
+            max-width: 100%;
+          }
+        }
+        &:hover {
+          background-color: #eee;
+          button {
+            display: flex;
+          }
+        }
+      }
+    }
+  }
+  .links_input {
+    height: 30px;
+    flex-shrink: 0;
+    margin-bottom: 6px;
   }
 }

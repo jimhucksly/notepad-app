@@ -4,7 +4,7 @@ import { Vue, Component } from 'vue-property-decorator'
   name: 'Error'
 })
 export default class Error extends Vue {
-  rende(h: any) {
+  render(h: any) {
     return h(
       'div',
       {

@@ -8,6 +8,7 @@ import Markdown from '~/components/markdown'
 import Preferences from '~/components/preferences'
 import Events from '~/components/events'
 import JsonViewer from '~/components/jsonViewer'
+import Links from '~/components/links'
 import Sidebar from '~/components/sidebar'
 import storage from '~/plugins/storage'
 import { userDataFileName } from '~/constants'
@@ -24,6 +25,7 @@ import { userDataFileName } from '~/constants'
     Preferences,
     Events,
     JsonViewer,
+    Links,
     Sidebar
   }
 })
@@ -48,6 +50,9 @@ export default class Index extends Vue {
   }
   get isJsonViewer() {
     return this.$store.getters.getIsJsonViewerShow
+  }
+  get isLinks() {
+    return this.$store.getters.getIsLinksShow
   }
   get token() {
     return this.$store.getters.getToken

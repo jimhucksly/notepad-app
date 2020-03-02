@@ -149,6 +149,12 @@
         color: #ccc;
       }
 
+      &.b-calendar__today {
+        span {
+          color: #fff;
+        }
+      }
+
       & > div {
         padding-top: 4px;
         font-size: 0.8rem;
@@ -332,8 +338,9 @@
 }
 
 .b-calendar-wrap .b-calendar__body div.b-calendar__today {
-  background-color: #eee;
-  color: #fff; }
+  background-color: rgba($blue_light, 0.4);
+  color: #fff;
+}
 
 /*.b-calendar .b-calendar-wrap .b-calendar__body div.b-calendar__holiday:not(.b-calendar__today) {
   background-color: #b0cdd9;

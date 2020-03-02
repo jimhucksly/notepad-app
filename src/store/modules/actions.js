@@ -79,6 +79,17 @@ const actions = {
     } else json = data
     store.commit('setEvents', json)
   },
+  linksJson(store, data) {
+    let json
+    if(isJSON(data)) {
+      try {
+        json = JSON.parse(data)
+      } catch (e) {
+        console.log(e)
+      }
+    } else json = data
+    store.commit('setLinks', json)
+  },
   mdTree(store, tree) {
     store.commit('setMdTree', tree)
   },
@@ -107,6 +118,9 @@ const actions = {
   uploadingPopupShow(store, flag) {
     store.commit('setIsUploadingPopupShow', flag)
   },
+  linkAddPopupShow(store, flag) {
+    store.commit('setIsLinkAddPopupShow', flag)
+  },
   preferences(store, flag) {
     store.commit('setIsPreferencesShow', flag)
   },
@@ -121,6 +135,9 @@ const actions = {
   },
   jsonViewer(store, flag) {
     store.commit('setIsJsonViewerShow', flag)
+  },
+  links(store, flag) {
+    store.commit('setIsLinksShow', flag)
   },
   downloadsTargetPath(store, path) {
     store.commit('setDownloadsTargetPath', path)
@@ -146,6 +163,7 @@ const actions = {
             store.dispatch('json', resp.data.data)
             store.dispatch('md', resp.data.md)
             store.dispatch('eventsJson', resp.data.events)
+            store.dispatch('linksJson', resp.data.links)
           } else {
             return null
           }
@@ -154,7 +172,7 @@ const actions = {
           store.dispatch('error', true)
           store.dispatch('setTimeout')
         })
-    }, 5000)
+    }, 3000)
     store.dispatch('timeout', timeout)
   },
   async action(store, { type, data }) {
@@ -266,10 +284,31 @@ const actions = {
           body: data
         }, jsonHeaders)
         if(eventResp instanceof Error) {
-          ipcRenderer.send('open-error-dialog', 'save markdown failed')
+          ipcRenderer.send('open-error-dialog', 'save event failed')
           return Promise.reject(eventResp)
         }
         return eventResp
+      case 'LINKS':
+        jsonHeaders.headers.Authorization = store.getters.getToken
+        const linksResp = await $http.get(type, jsonHeaders)
+        if(linksResp.data) {
+          try {
+            store.dispatch('linksJson', JSON.parse(linksResp.data.data))
+          } catch (e) {
+            console.log(e)
+          }
+        }
+        return linksResp
+      case 'LINK':
+        jsonHeaders.headers.Authorization = store.getters.getToken
+        const linkResp = await $http.post(type, {
+          body: data
+        }, jsonHeaders)
+        if(linkResp instanceof Error) {
+          ipcRenderer.send('open-error-dialog', 'save link failed')
+          return Promise.reject(linkResp)
+        }
+        return linkResp
     }
   }
 }

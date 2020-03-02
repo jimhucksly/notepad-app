@@ -3,6 +3,7 @@ import SidebarSwitcher from '~/components/sidebarSwitcher'
 import Projects from '~/components/projects'
 import SidebarTree from '~/components/sidebarTree'
 import JsonViewerBtns from '~/components/JsonViewerBtns'
+import LinksBtns from '~/components/LinksBtns'
 
 @Component({
   name: 'Sidebar',
@@ -10,7 +11,8 @@ import JsonViewerBtns from '~/components/JsonViewerBtns'
     SidebarSwitcher,
     Projects,
     SidebarTree,
-    JsonViewerBtns
+    JsonViewerBtns,
+    LinksBtns
   }
 })
 export default class Sidebar extends Vue {
@@ -27,6 +29,9 @@ export default class Sidebar extends Vue {
   }
   get isJsonViewer() {
     return this.$store.getters.getIsJsonViewerShow
+  }
+  get isLinks() {
+    return this.$store.getters.getIsLinksShow
   }
   get mdTree() {
     return this.$store.getters.getMdTree
