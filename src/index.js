@@ -16,6 +16,7 @@ process.on('uncaughtException', (err) => {
 })
 
 app.commandLine.appendSwitch('ignore-certificate-errors', 'true')
+app.allowRendererProcessReuse = true
 
 let mainWindow
 let appTray
@@ -32,18 +33,22 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1100,
     height: 563,
-    minWidth: 1000,
+    minWidth: 1100,
     minHeight: 563,
     useContentSize: true,
     frame: false,
     toolbar: false,
     show: false,
     webPreferences: {
-      nodeIntegration: true
+      webSecurity: true,
+      nodeIntegration: true,
+      nativeWindowOpen: true,
+      enableRemoteModule: false,
+      partition: 'persist:tmp'
     },
     icon: path.resolve(__static, 'icons/64x64.png'),
-    headless: true, // undiscovered param
-    args: ['--no-sandbox'] // undiscovered param
+    headless: true,
+    args: ['--no-sandbox']
   })
 
   mainWindow.loadURL(winURL)
@@ -95,10 +100,6 @@ function createWindow() {
   mainWindow.webContents.on('did-frame-finish-load', () => {
     if(process.env.NODE_ENV === 'development') {
       mainWindow.focus()
-      // mainWindow.webContents.openDevTools()
-      // mainWindow.webContents.on('devtools-opened', () => {
-      //   mainWindow.focus()
-      // })
     }
   })
 }
@@ -186,19 +187,43 @@ app.on('before-quit', () => {
 
 app.setPath('userData', path.resolve(app.getPath('userData'), '../JimhuckslyStudio/notepad-app'))
 
-ipcMain.on('menu-popup', (event, { window }) => {
-  const appMenu = Menu.getApplicationMenu()
-  appMenu.popup(window)
+ipcMain.on('get-app-path', (event) => {
+  event.sender.send('set-app-path', app.getPath('userData'))
 })
 
-ipcMain.on('context-menu-popup', (event, { window }) => {
+ipcMain.on('get-window-title', (event) => {
+  event.sender.send('set-window-title', mainWindow.getTitle())
+})
+
+ipcMain.on('minimize', (event) => {
+  mainWindow.minimize()
+})
+
+ipcMain.on('min-max', (event) => {
+  if(mainWindow.isMaximized()) {
+    mainWindow.unmaximize()
+  } else {
+    mainWindow.maximize()
+  }
+})
+
+ipcMain.on('hide', (event) => {
+  mainWindow.hide()
+})
+
+ipcMain.on('menu-popup', (event) => {
+  const appMenu = Menu.getApplicationMenu()
+  appMenu.popup(mainWindow)
+})
+
+ipcMain.on('context-menu-popup', (event) => {
   const contextMenu = new Menu()
   contextMenu.append(new MenuItem({
     label: 'Copy',
     accelerator: 'CmdOrCtrl+C',
     role: 'copy'
   }))
-  contextMenu.popup(window)
+  contextMenu.popup(mainWindow)
 })
 
 ipcMain.on('authorized', () => {
@@ -319,6 +344,8 @@ ipcMain.on('open-dialog-unlock-confirm', (event) => {
   }).then(data => {
     if(data.response === 0) {
       event.sender.send('unlock-is-confimed')
+    } else {
+      event.sender.send('unlock-is-unconfimed')
     }
   })
 })
@@ -327,6 +354,9 @@ ipcMain.on('codemirror-link-click', (event, text) => {
   event.sender.send('codemirror-link-click', text)
 })
 
+ipcMain.on('todo-add', (event, text) => {
+  event.sender.send('todo-add')
+})
 
 ipcMain.on('data-transfer', (event, data) => {
   event.sender.send('data-transfer', data)

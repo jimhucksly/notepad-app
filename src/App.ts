@@ -51,9 +51,7 @@ export default class App extends Vue {
         hasSelection = selection ? !!selection.length : false
       }
       if(hasSelection) {
-        this.$electron.ipcRenderer.send('context-menu-popup', {
-          window: this.$electron.remote.getCurrentWindow()
-        })
+        this.$electron.ipcRenderer.send('context-menu-popup')
       }
     })
   }
