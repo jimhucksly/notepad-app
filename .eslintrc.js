@@ -35,7 +35,8 @@ module.exports = {
         "for": {"after": false},
         "while": {"after": false},
         "switch": {"after": false},
-        "import": {"after": true}
+        "import": {"after": true},
+        "catch": {"after": false}
       }
     }],
     // disallow or enforce spaces inside of parentheses (space-in-parens)
