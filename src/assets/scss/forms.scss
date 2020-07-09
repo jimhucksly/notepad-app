@@ -140,6 +140,13 @@ textarea {
   }
 }
 
+.btn-danger {
+  background-color: $editor_red;
+  &:hover {
+    background-color: lighten($editor_red, 5%);
+  }
+}
+
 .btn-sm {
   width: 85px;
   height: 20px;

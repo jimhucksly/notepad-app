@@ -91,47 +91,48 @@ a[href] {
   }
 }
 
-// notepad cont scrollbar styling
+// scrollbar styling
 
 @each $elem in (
-  'notepad_cont', 'editor-preview',
-  'CodeMirror-scroll', 'events__calendar',
-  'textarea', 'links_area'
+  '.notepad_cont', '.editor-preview',
+  '.CodeMirror-scroll', '.events__calendar',
+  'textarea', '.links_area', '.todo_cont'
 ) {
-  .#{$elem}::-webkit-scrollbar-button {
+  #{$elem}::-webkit-scrollbar-button {
     background-image: url('') !important;
     background-repeat: no-repeat !important;
     width: 10px !important;
     height: 0px !important;
   }
-  .#{$elem}::-webkit-scrollbar-track {
+  #{$elem}::-webkit-scrollbar-track {
     background-color:#eee !important;
   }
-  .#{$elem}::-webkit-scrollbar-thumb {
+  #{$elem}::-webkit-scrollbar-thumb {
     -webkit-border-radius: 0px !important;
     border-radius: 0px !important;
     background-color: $blue_light !important;
     cursor: default;
   }
-  .#{$elem}::-webkit-scrollbar-thumb:hover {
+  #{$elem}::-webkit-scrollbar-thumb:hover {
     background-color: $blue_light !important;
     cursor: default;
   }
-  .#{$elem}::-webkit-resizer {
+  #{$elem}::-webkit-resizer {
     background-image :url('') !important;
     background-repeat: no-repeat !important;
     width: 10px !important;
     height: 0px !important;
   }
-  .#{$elem}::-webkit-scrollbar {
+  #{$elem}::-webkit-scrollbar {
     width: 10px !important;
   }
 }
 
 // projects|markdown scrollbar styling
 
-
-@each $elem in ('projects', 'markdown') {
+@each $elem in ('projects_inner', 'markdown',
+  'projects_editor_inner', 'projects_archives_inner'
+) {
   .#{$elem}::-webkit-scrollbar-button {
     background-image:url('');
     background-repeat:no-repeat;
