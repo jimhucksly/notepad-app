@@ -9,6 +9,7 @@
           <auth v-if="!isAuth" />
           <preferences v-else-if="isPreferences" />
           <notepad v-else-if="isProjects" />
+          <todo v-else-if="isTodo" />
           <markdown v-else-if="isMarkdown" />
           <events v-else-if="isEvents" />
           <json-viewer v-else-if="isJsonViewer" />

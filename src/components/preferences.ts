@@ -1,12 +1,14 @@
 import { Vue, Component, Watch } from 'vue-property-decorator'
 import storage from '~/plugins/storage'
+import pkg from '../../package.json'
+import AutoLaunch from 'auto-launch'
 
 interface IPreferences {
   downloadsTargetPath: string
 }
 
 @Component({
-  name: 'Preferences'
+  name: 'Preferences',
 })
 export default class Preferences extends Vue {
   preferences: IPreferences = {
@@ -19,11 +21,21 @@ export default class Preferences extends Vue {
     downloadsTargetPath: 0
   }
 
+  appAutoLauncher: any = null
+  isAutoLaunchEnabled: boolean = false
+
   get userDataPath() {
     return this.$store.getters.getUserDataPath
   }
   get downloadsTargetPath() {
     return this.$store.getters.getDownloadsTargetPath
+  }
+
+  @Watch('isAutoLaunchEnabled')
+  onIsAutoLaunchEnabledChanged(v: boolean) {
+    if(v) {
+      this.appAutoLauncher.enable()
+    } else this.appAutoLauncher.disable()
   }
 
   protected save() {
@@ -61,13 +73,26 @@ export default class Preferences extends Vue {
       defaultPath: this.downloadsTargetPath
     })
     this.$electron.ipcRenderer.on('open-dialog-paths-selected', (event: any, response: any) => {
+      const path = response && response.filePaths && response.filePaths[0] ? response.filePaths[0] : null
       const currentPath = this.preferences.downloadsTargetPath || this.userDataPath
-      this.preferences.downloadsTargetPath = response && response[0] ? response[0] : currentPath
+      this.preferences.downloadsTargetPath = path ? path : currentPath
     })
   }
 
   mounted() {
     this.preferences.downloadsTargetPath = this.$store.getters.getDownloadsTargetPath
     this.defaults.downloadsTargetPath = this.$store.getters.getDownloadsTargetPath
+
+    const appAutoLauncher = new AutoLaunch({
+      name: pkg.build.productName.replace(/ /g, '')
+    })
+
+    this.appAutoLauncher = appAutoLauncher
+
+    appAutoLauncher.isEnabled()
+      .then((isEnabled: boolean) => {
+        this.isAutoLaunchEnabled = isEnabled
+        return
+      }).catch((err: any) => {})
   }
 }

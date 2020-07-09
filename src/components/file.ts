@@ -5,10 +5,10 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 })
 export default class File extends Vue {
   @Prop()
-  itemKey!: string
+  readonly itemKey!: string
 
   @Prop()
-  itemFile!: any
+  readonly itemFile!: any
 
   get stamp() {
     return this.itemKey

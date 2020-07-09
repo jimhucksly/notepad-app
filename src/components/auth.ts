@@ -1,5 +1,7 @@
 import { Vue, Component, Watch } from 'vue-property-decorator'
 import _ from 'lodash'
+import storage from '~/plugins/storage'
+import { userDataFileName } from '~/constants'
 
 interface IErrors {
   login: number
@@ -52,6 +54,11 @@ export default class Auth extends Vue {
       })
         .then((resp: any) => {
           this.$store.dispatch('token', resp.token)
+          const userDataPath = this.$store.getters.getUserDataPath
+          return storage.set(userDataPath, userDataFileName, { token: resp.token })
+        })
+        .then((resp: any) => {
+          console.log('write to file is successfully completed')
           this.$store.dispatch('auth', true)
           this.$store.dispatch('action', {
             type: 'GET_JSON'

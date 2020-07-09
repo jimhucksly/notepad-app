@@ -8,7 +8,8 @@
             <label class="m-b-5"
               :class="{ error: errors.downloadsTargetPath }"
               >
-              Downloads target path:</label>
+              Downloads target path:
+            </label>
             <input type="text"
               :class="{ error: errors.downloadsTargetPath }"
               v-model="preferences.downloadsTargetPath"
@@ -22,6 +23,16 @@
           </div>
           <div class="form-group-btn">
             <button class="btn btn-default" @click.prevent="openFolderDialog">Change</button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="form-group">
+          <div class="form-group-inner flex-between items-center">
+            <label class="m-b-5">Run App when Windows startup</label>
+            <b-checkbox
+              v-model="isAutoLaunchEnabled"
+            />
           </div>
         </div>
       </div>

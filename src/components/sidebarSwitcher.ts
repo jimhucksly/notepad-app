@@ -11,7 +11,7 @@ interface IMenu {
 })
 export default class SidebarSwitcher extends Vue {
   @Prop({ type: String, default: '' })
-  legend!: string
+  readonly legend!: string
 
   protected menu: IMenu[] = [
     {
@@ -25,19 +25,24 @@ export default class SidebarSwitcher extends Vue {
       id: 2
     },
     {
-      name: 'events',
-      nameAlt: 'Events',
+      name: 'todo',
+      nameAlt: 'Todo',
       id: 3
     },
     {
-      name: 'jsonViewer',
-      nameAlt: 'Json Viewer',
+      name: 'events',
+      nameAlt: 'Events',
       id: 4
     },
     {
       name: 'links',
       nameAlt: 'Links',
       id: 5
+    },
+    {
+      name: 'jsonViewer',
+      nameAlt: 'Json Viewer',
+      id: 6
     }
   ]
 
@@ -45,6 +50,9 @@ export default class SidebarSwitcher extends Vue {
 
   get isProjects() {
     return this.$store.getters.getIsProjectsShow
+  }
+  get isTodo() {
+    return this.$store.getters.getIsTodoShow
   }
   get isMarkdown() {
     return this.$store.getters.getIsMarkdownShow
@@ -61,9 +69,10 @@ export default class SidebarSwitcher extends Vue {
   get current() {
     if(this.isProjects) return 1
     if(this.isMarkdown) return 2
-    if(this.isEvents) return 3
-    if(this.isJsonViewer) return 4
+    if(this.isTodo) return 3
+    if(this.isEvents) return 4
     if(this.isLinks) return 5
+    if(this.isJsonViewer) return 6
     return 1
   }
   get legendInternal() {
@@ -80,8 +89,30 @@ export default class SidebarSwitcher extends Vue {
   protected toggle(): any {
     if(!!this.legend) return null
     this.isExpand = !this.isExpand
-    if(this.isExpand) this.$emit('onExpand')
-    else this.$emit('onHide')
+    if(this.isExpand) {
+      this.$emit('onExpand')
+      const switcher: any = this.$refs.switcher
+      document.onclick = (e: any) => {
+        if(!e.target.closest('.switcher')) {
+          this.isExpand = !this.isExpand
+          this.$emit('onHide')
+          document.onclick = null
+        }
+      }
+      document.onkeydown = (e) => {
+        if(e.keyCode === 27 || e.code === 'Escape') {
+          this.isExpand = !this.isExpand
+          this.$emit('onHide')
+          document.onclick = null
+          document.onkeydown = null
+        }
+      }
+    }
+    else {
+      document.onclick = null
+      document.onkeydown = null
+      this.$emit('onHide')
+    }
   }
 
   protected select(id: number) {

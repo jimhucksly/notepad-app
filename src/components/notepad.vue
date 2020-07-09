@@ -26,7 +26,7 @@
       </div>
     </div>
     <div class="notepad_textarea">
-      <textarea placeholder="Сообщение" v-model="message" v-on:keydown.enter.ctrl="send"></textarea>
+      <textarea placeholder="New record" v-model="message" v-on:keydown.enter.ctrl="send"></textarea>
       <div class="notepad_btns">
         <label class="notepad_attachments">
           <input type="file" @change="onFileChange">

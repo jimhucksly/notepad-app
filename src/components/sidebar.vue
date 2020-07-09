@@ -6,9 +6,26 @@
       @onHide="isSwitcherMenuExpanded = false"
     />
     <projects
+      ref="projects"
       class="projects"
       v-show="!isPreferences && isProjects"
       :style="{opacity: isSwitcherMenuExpanded ? 0.4 : 1}"
+      @onEdit="(stamp) => {
+        isProjectsArchivesInit = false
+        projectEditedItemKey = stamp
+      }"
+      @onArchives="(v) => {
+        projectEditedItemKey = ''
+        isProjectsArchivesInit = v
+      }"
+    />
+    <projectsEditor
+      v-if="isProjectEditorVisibility"
+      :item-stamp.sync="projectEditedItemKey"
+    />
+    <projectsArchives
+      v-if="isProjectArchivesVisibility"
+      :init="isProjectsArchivesInit"
     />
     <div
       class="markdown"
@@ -25,6 +42,11 @@
     <links-btns
       class="links"
       v-show="!isPreferences && isLinks"
+      :style="{opacity: isSwitcherMenuExpanded ? 0.4 : 1}"
+    />
+    <todo-btns
+      class="todo"
+      v-show="!isPreferences && isTodo"
       :style="{opacity: isSwitcherMenuExpanded ? 0.4 : 1}"
     />
   </aside>

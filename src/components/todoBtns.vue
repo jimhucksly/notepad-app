@@ -3,4 +3,4 @@
     <btn-add @click="add" />
   </div>
 </template>
-<script src="./linksBtns.ts" lang="ts"></script>
+<script src="./todoBtns.ts" lang="ts"></script>

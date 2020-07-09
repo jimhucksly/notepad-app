@@ -13,6 +13,8 @@ Vue.component('PopupTitle', {
   name: 'Popup'
 })
 export default class Popup extends Vue {
+  appName: string = ''
+
   get aboutPopupShow() {
     return this.$store.getters.getIsAboutPopupShow
   }
@@ -25,9 +27,6 @@ export default class Popup extends Vue {
   get showPopup() {
     const flags: string[] = ['aboutPopupShow', 'uploadingPopupShow', 'linkAddPopupShow']
     return flags.map((key: string) => this[key]).reduce((res, el) => res || Boolean(el))
-  }
-  get appName() {
-    return this.$electron.remote.getCurrentWindow().getTitle()
   }
 
   @Watch('showPopup')
@@ -63,6 +62,10 @@ export default class Popup extends Vue {
   }
 
   mounted() {
+    this.$electron.ipcRenderer.send('get-window-title')
+    this.$electron.ipcRenderer.on('set-window-title', (e: any, title: string) => {
+      this.appName = title
+    })
     this.$electron.ipcRenderer.on('data-transfer', (event: any, data: any) => {
       if(data.target === 'popup-link-edit') {
         this.linkUrl = data.data.url

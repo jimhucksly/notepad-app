@@ -1,4 +1,4 @@
-import { Vue, Component } from 'vue-property-decorator'
+import { Vue, Component, Watch } from 'vue-property-decorator'
 import { cloneDeep, unset } from 'lodash'
 
 @Component({
@@ -6,7 +6,12 @@ import { cloneDeep, unset } from 'lodash'
 })
 export default class Projects extends Vue {
   names: any = {}
+  checked: string = ''
+  isArchivesInit: boolean = false
 
+  get isProjects() {
+    return this.$store.getters.getIsProjectsShow
+  }
   get json() {
     return this.$store.getters.getJson
   }
@@ -14,35 +19,14 @@ export default class Projects extends Vue {
     return this.$store.getters.getFilter
   }
 
-  protected triggerEdit(e: any, stamp: string) {
-    const items: any = this.$refs.projects_item
-    const item = items.find((el: any) => el.dataset.stamp === stamp)
-    if(item.classList.contains('edit')) {
-      item.classList.remove('edit')
-      const o = {
-        [stamp]: {
-          key: stamp,
-          date: this.json[stamp].date,
-          name: this.names[stamp],
-          lock: this.json[stamp].lock,
-          message: this.json[stamp].message,
-          file: this.json[stamp].file
-        }
-      }
-      this.$store.dispatch('json', { ...this.json, ...o })
-      this.$store.dispatch('action', {
-        type: 'UPDATE',
-        data: o
-      })
-    } else {
-      item.classList.add('edit')
-      this.names = {
-        ...this.names,
-        [stamp]: this.json[stamp].name || this.json[stamp].key
-      }
-    }
+  @Watch('isProjects')
+  onIsProjectsChanged(v: boolean) {
+    this.checked = ''
+    this.isArchivesInit = false
+    this.$emit('onArchives', this.isArchivesInit)
   }
-  protected triggerLock(e: any, stamp: string) {
+
+  protected toggleLock(e: any, stamp: string) {
     const items: any = this.$refs.projects_item
     const item = items.find((el: any) => el.dataset.stamp === stamp)
     const isLocked = item.classList.contains('lock')
@@ -74,9 +58,11 @@ export default class Projects extends Vue {
       updateJson()
     }
   }
-  protected triggerFilter(e: any, stamp: string) {
+  protected toggleFilter(e: any, stamp: string): void | null {
     const items: any = this.$refs.projects_item
     const item = items.find((el: any) => el.dataset.stamp === stamp)
+    const target: any = e.target
+    if(target.closest('.projects_item_check')) return null
     if(e.target.tagName === 'DIV' || e.target.tagName === 'LABEL') {
       if(item.classList.contains('active')) {
         const buff = cloneDeep(this.filter)
@@ -86,5 +72,32 @@ export default class Projects extends Vue {
         this.$store.dispatch('filter', { ...this.filter, [stamp]: true })
       }
     }
+  }
+  protected toggleCheck(e: any) {
+    const target: any = e.target
+    const isChecked: boolean = target.checked
+    if(isChecked) {
+      this.isArchivesInit = false
+      this.$emit('onArchives', false)
+    }
+    this.checked = isChecked ? target.dataset.stamp : ''
+    this.$emit('onEdit', this.checked)
+  }
+  protected clearCheck() {
+    this.checked = ''
+    const input: any = document.querySelectorAll('input[type="checkbox"]:checked')
+    if(input && input[0]) {
+      input[0].checked = false
+    }
+  }
+  protected toggleArchives() {
+    this.isArchivesInit = !this.isArchivesInit
+    this.$emit('onArchives', this.isArchivesInit)
+  }
+
+  async created() {
+    this.$store.dispatch('action', {
+      type: 'GET_ARCHIVES'
+    })
   }
 }

@@ -65,6 +65,7 @@ export default class Notepad extends Vue {
       })
     })
   }
+
   protected onFileChange(e: any): void | null {
     const files = e.target.files || e.dataTransfer.files
     if(files.length === 0) return null
@@ -73,6 +74,7 @@ export default class Notepad extends Vue {
     formData.set('file', files[0])
     this.upload(formData, getFileType(files[0].name))
   }
+
   protected addFile(name: string, link: string, type: string) {
     this.newMsgFlag = true
     const {date, stamp} = now()
@@ -99,6 +101,7 @@ export default class Notepad extends Vue {
       })
     })
   }
+
   protected async upload(file: object, fileType: string) {
     try {
       const sResponse = await this.$store.dispatch('action', {
@@ -112,6 +115,7 @@ export default class Notepad extends Vue {
       console.error(e)
     }
   }
+
   protected read() {
     const self: any = this.$refs.notepad_cont
     const rect = self.getBoundingClientRect()
@@ -134,6 +138,7 @@ export default class Notepad extends Vue {
       }
     })
   }
+
   protected updated() {
     this.read()
   }

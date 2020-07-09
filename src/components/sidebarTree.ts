@@ -12,13 +12,13 @@ export default class SidebarTreeComponent extends Vue {
     type: Array,
     default: () => []
   })
-  tree!: object[]
+  readonly tree!: object[]
 
   @Prop({
     type: Number,
     default: 1
   })
-  level!: number
+  readonly level!: number
 
   protected selectNode(item: any) {
     this.$electron.ipcRenderer.send('codemirror-link-click', item.name)

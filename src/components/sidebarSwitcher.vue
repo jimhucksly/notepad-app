@@ -12,7 +12,7 @@
     </span>
     <div class="switcher__menu">
       <ul>
-        <li v-for="item in menu" @click="select(item.id)">{{ item.nameAlt }}</li>
+        <li v-for="item in menu" :class="{ active: item.id === current }" @click="select(item.id)">{{ item.nameAlt }}</li>
       </ul>
     </div>
   </div>

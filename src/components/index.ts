@@ -4,6 +4,7 @@ import Loading from '~/components/loading'
 import Error from '~/components/error'
 import Auth from '~/components/auth'
 import Notepad from '~/components/notepad'
+import Todo from '~/components/todo'
 import Markdown from '~/components/markdown'
 import Preferences from '~/components/preferences'
 import Events from '~/components/events'
@@ -21,6 +22,7 @@ import { userDataFileName } from '~/constants'
     Auth,
     Error,
     Notepad,
+    Todo,
     Markdown,
     Preferences,
     Events,
@@ -30,6 +32,9 @@ import { userDataFileName } from '~/constants'
   }
 })
 export default class Index extends Vue {
+  get params() {
+    return this.$store.getters.getParams
+  }
   get loading() {
     return this.$store.getters.getLoading
   }
@@ -41,6 +46,9 @@ export default class Index extends Vue {
   }
   get isProjects() {
     return this.$store.getters.getIsProjectsShow
+  }
+  get isTodo() {
+    return this.$store.getters.getIsTodoShow
   }
   get isMarkdown() {
     return this.$store.getters.getIsMarkdownShow
@@ -61,53 +69,55 @@ export default class Index extends Vue {
     return this.$store.getters.getError
   }
 
-  protected checkToken(p: string) {
+  protected async checkToken(p: string) {
     this.$store.dispatch('loading', true)
-    storage.isPathExists(p)
-      .then(() => {
-        return storage.isFileExists(p, userDataFileName)
-      })
-      .then(() => {
-        return storage.get(p, userDataFileName, 'token')
-      })
-      .then((token) => {
-        if(token) {
-          this.$store.dispatch('auth', true)
-          this.$store.dispatch('token', token)
-          this.getJson()
-          this.getMd()
-        } else throw new Error()
-      })
-      .catch(() => {
-        this.$store.dispatch('loading', false)
-        this.$store.dispatch('auth', false)
-      })
+    const token = await storage.get(p, userDataFileName, 'token')
+    if(token) {
+      this.$store.dispatch('auth', true)
+      this.$store.dispatch('token', token)
+      this.getJson()
+      this.getMd()
+      return true
+    } else {
+      this.$store.dispatch('loading', false)
+      this.$store.dispatch('auth', false)
+      return null
+    }
   }
 
-  protected getJson() {
-    this.$store.dispatch('action', {
+  protected async getJson() {
+    await this.$store.dispatch('action', {
       type: 'GET_JSON'
     })
   }
 
-  protected getMd() {
-    this.$store.dispatch('action', {
+  protected async getMd() {
+    await this.$store.dispatch('action', {
       type: 'GET_MD'
     })
   }
 
-  async created(): Promise<void> {
-    const appPath = this.$electron.remote.app.getPath('userData')
+  protected async setPath(appPath: string) {
     try {
       this.$store.dispatch('userDataPath', appPath)
-      this.checkToken(appPath)
       const json: any = await storage.get(appPath, 'UserPreferences')
       if(json.downloadsTargetPath !== undefined) {
         this.$store.dispatch('downloadsTargetPath', json.downloadsTargetPath)
+      } else {
+        json.downloadsTargetPath = appPath
+        this.$store.dispatch('downloadsTargetPath', appPath)
       }
     } catch(e) {
       console.error(e)
       this.$store.dispatch('downloadsTargetPath', appPath)
     }
+  }
+
+  async created(): Promise<void> {
+    this.$electron.ipcRenderer.send('get-app-path')
+    await this.$electron.ipcRenderer.on('set-app-path', async (e: any, appPath: any) => {
+      await this.checkToken(appPath)
+      await this.setPath(appPath)
+    })
   }
 }
