@@ -3,7 +3,6 @@
 const chalk = require('chalk')
 const electron = require('electron')
 const path = require('path')
-const { say } = require('cfonts')
 const { spawn } = require('child_process')
 const webpack = require('webpack')
 const WebpackDevServer = require('webpack-dev-server')
@@ -24,11 +23,17 @@ let electronProcess = null
 let manualRestart = false
 let hotMiddleware
 
+let isRunning = false
+
 function logStats (proc, data) {
   let log = ''
 
   log += chalk.yellow.bold(`${proc} Process ${new Array((19 - proc.length) + 1).join('-')}`)
   log += '\n\n'
+
+  let p = '\n'
+  p += chalk.yellow.bold(`${proc} Process ${new Array((19 - proc.length) + 1).join('-')}`)
+  p += '\n'
 
   if (typeof data === 'object') {
     data.toString({
@@ -43,14 +48,64 @@ function logStats (proc, data) {
 
   log += '\n' + chalk.yellow.bold(`${new Array(28 + 1).join('-')}`) + '\n'
 
-  if(process.env.CHUNKS_LOG === 'true') console.log(log)
+  if(
+    process.env.CHUNKS_LOG === 'true' ||
+    process.env.NODE_ENV === 'production'
+  ) {
+    console.log(log)
+  } else console.log(p)
+}
+
+function startMain () {
+  return new Promise((resolve, reject) => {
+    mainConfig.entry.main = [
+      path.join(__dirname, '../src/index.dev.js')
+    ].concat(mainConfig.entry.main)
+
+    mainConfig.mode = 'development'
+
+    const compiler = webpack(mainConfig)
+
+    compiler.hooks.watchRun.tapAsync('watch-run', (compilation, done) => {
+      console.log(chalk.white.bold('compiling...' + '\n'))
+      hotMiddleware.publish({ action: 'compiling' })
+      done()
+    })
+
+    compiler.watch({}, (err, stats) => {
+      if (err) {
+        console.log(err)
+        return
+      }
+
+      if(!isRunning) {
+        logStats('Main', stats)
+      }
+
+      if (electronProcess && electronProcess.kill) {
+        manualRestart = true
+        process.kill(electronProcess.pid)
+        electronProcess = null
+        startElectron()
+
+        setTimeout(() => {
+          manualRestart = false
+        }, 5000)
+      }
+
+      resolve()
+    })
+  })
 }
 
 function startRenderer () {
   return new Promise((resolve, reject) => {
-    rendererConfig.entry.renderer = [path.join(__dirname, 'dev-client')].concat(rendererConfig.entry.renderer)
+    rendererConfig.entry.renderer = [
+      path.join(__dirname, 'dev-client')
+    ].concat(rendererConfig.entry.renderer)
     rendererConfig.mode = 'development'
     const compiler = webpack(rendererConfig)
+
     hotMiddleware = webpackHotMiddleware(compiler, {
       log: false,
       heartbeat: 2500
@@ -64,21 +119,17 @@ function startRenderer () {
     })
 
     compiler.hooks.done.tap('done', stats => {
-      logStats('Renderer', stats)
+      if(!isRunning) {
+        logStats('Renderer', stats)
+      } else {
+        const d = new Date(Date.now())
+        const hh = ('0' + d.getHours()).slice(-2)
+        const mm = ('0' + d.getMinutes()).slice(-2)
+        const ss = ('0' + d.getSeconds()).slice(-2)
+        const dd = hh + ':' + mm + ':' + ss
+        console.log(chalk.yellow.bold('app is updated: ') + dd + '\n')
+      }
     })
-
-    // function startServer() {
-
-    //   server.get('/', function(req, res) {
-    //     res.render(path.join(__dirname, '../dist/electron/index.html'))
-    //   })
-
-    //   server.use(hotMiddleware)
-    //   server.listen(port, host)
-    //   resolve()
-    // }
-
-    // startServer()
 
     const server = new WebpackDevServer(
       compiler,
@@ -96,42 +147,6 @@ function startRenderer () {
     )
 
     server.listen(9080)
-  })
-}
-
-function startMain () {
-  return new Promise((resolve, reject) => {
-    mainConfig.entry.main = [path.join(__dirname, '../src/index.dev.js')].concat(mainConfig.entry.main)
-    mainConfig.mode = 'development'
-    const compiler = webpack(mainConfig)
-
-    compiler.hooks.watchRun.tapAsync('watch-run', (compilation, done) => {
-      logStats('Main', chalk.white.bold('compiling...'))
-      hotMiddleware.publish({ action: 'compiling' })
-      done()
-    })
-
-    compiler.watch({}, (err, stats) => {
-      if (err) {
-        console.log(err)
-        return
-      }
-
-      logStats('Main', stats)
-
-      if (electronProcess && electronProcess.kill) {
-        manualRestart = true
-        process.kill(electronProcess.pid)
-        electronProcess = null
-        startElectron()
-
-        setTimeout(() => {
-          manualRestart = false
-        }, 5000)
-      }
-
-      resolve()
-    })
   })
 }
 
@@ -179,31 +194,16 @@ function electronLog (data, color) {
   }
 }
 
-function greeting () {
-  const cols = process.stdout.columns
-  let text = ''
-
-  if (cols > 104) text = 'electron-vue'
-  else if (cols > 76) text = 'electron-|vue'
-  else text = false
-
-  // if (text) {
-  //   say(text, {
-  //     colors: ['yellow'],
-  //     font: 'simple3d',
-  //     space: false
-  //   })
-  // } else console.log(chalk.yellow.bold('\n  electron-vue'))
-  // console.log(chalk.blue('  getting ready...') + '\n')
-}
-
 function init () {
-  // greeting()
-  console.log(chalk.white('  initializing app...') + '\n')
+  process.env.CHUNKS_LOG = 'true'
+  console.log('\n' + chalk.white('initializing app...') + '\n')
 
-  Promise.all([startRenderer(), startMain()])
+  Promise
+    .all([startRenderer(), startMain()])
     .then(() => {
-      console.log(chalk.green('  app ready') + '\n')
+      isRunning = true
+      console.log(chalk.green('app is sucessfully running') + '\n')
+      process.env.CHUNKS_LOG = 'false'
       startElectron()
     })
     .catch(err => {

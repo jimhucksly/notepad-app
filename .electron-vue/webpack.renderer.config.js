@@ -1,6 +1,7 @@
 'use strict'
 
 process.env.BABEL_ENV = 'renderer'
+process.env.CHUNKS_LOG = 'false'
 
 const path = require('path')
 const { dependencies } = require('../package.json')
